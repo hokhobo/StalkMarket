@@ -1,0 +1,94 @@
+Stalk Market Simulator V1.0 Pseudocode
+
+##Flow Of Game##
+#-Set Up-
+#>Distribute Currency
+#>Draw 2 Cards from the Bull or Bear Deck
+#>Set Starting Prices
+#>Build Starting Portfolio
+#>Manipulation Free Market Move
+#
+#-Normal Turn-
+#>Draw 2 Cards from the Bull or Bear Deck
+#>Trade amongst Players
+#>Trade with Market
+#>Draw Market Card
+#
+#>Move Prices
+#-Last Turn-
+#>Draw 2 Cards from the Bull or Bear Deck
+#>Trade amongst Players
+#>Trade with Market
+#>Draw 3 Market Cards
+#>Move Prices
+####
+
+#Objects and Functions
+-Player
+>Currency Balance
+>Portfolio
+>Cards
+
+-Stock
+>Price
+>Last Movement
+>Good Season
+>Bad Season
+
+-Card
+>Type (Bull, Bear, Market)
+>Effect
+
+-Deck
+>Type
+>Cards
+
+-Turn
+>Season
+>Number
+
+
+long() - 
+short() - 
+posorNeg() - Randomly produce 1 or -1
+sizeofMove() - Randomly produce a 1, 2 or 3
+movePrice() - Change stock price
+drawCard() - take a card 
+updatePort() - change protfolio positions
+trade() - 
+
+
+#Program for 1 Player#
+setUp()
+{
+startamt = 100
+loop = 1
+setStartPrices()
+}
+
+newPlayer()
+{
+New Player = Player1
+Player1.cash = startamt
+Player1.drawCards()
+Player1.buyfromMarket()
+}
+
+turnZero()
+{
+marketMove()
+}
+
+takeTurn()
+{
+Player1.drawCards()
+Player1.trade()
+
+}
+
+
+
+
+
+
+
