@@ -1,4 +1,5 @@
 #Defining object classes
+
 #Stock
 class Stock:
  def __init__(self, ticker, price, good, bad):
@@ -6,7 +7,7 @@ class Stock:
   self.price = price
   self.good = good
   self.bad = bad
- def chgPrice(self, chg):
+ def chgP(self, chg):
   self.price += chg
 
 #Card
@@ -14,165 +15,125 @@ class Card:
  def __init__(self, cardtype, effect):
   self.cardtype = cardtype
   self.effect = effect
-  
-#Deck
-class Deck:
- def __init__(self):
-  self.pile = []
-  
- def addCard(self, card):
-  self.pile.append(card)
-
- def removeCard(self):
-  self.pile.remove(pile[0])
-
- def shuffle(self):
-  self.pile = self.pile
-  
-  
-#Portfolio  
-class Portfolio:
- def __init__(self):
-  self.holdings = []
-  
- def addStock(self, stock, quant):
-  self.holdings.append([stock, quant])
-
- def updateQuant(self, stock, chg):
-  self.holdings[stock][1] += chg
-  
+  self.hidden = True
   
 #Player 
 class Player:
  def __init__(self, ID):
   self.ID = ID
   self.cash = 0
-  self.positions = Portfolio()
+  self.positions = []
   self.hand = []
 
- def buildPortfolio(self):
-  self.positions = self.positions
-  
- def updatePortfolio(self):
-  self.positions = self.positions
-  
+#Create a list of stocks from *stocklist and set quantities to 0
+ def buildPortfolio(self, stocklist):
+  for stocks in stocklist:
+   self.positions.append([stocks, 0])
+  self.cash += 100
+
+#Show name, cash, and positions of player  
  def showPortfolio(self):
   print(Player1.ID)
   print("Cash: " + str(Player1.cash))
-  for x in self.positions.holdings:
+  for x in self.positions:
    print(x[0].ticker + " " + str(x[1]))
    
- def drawCard(self, card):
-  self.hand.append(card)
-  
+#Draw from *deck and put into hand  
+ def drawCard(self, deck):
+  self.hand.append(deck.pop())
+
+#Player removes* card from hand and adds it to play stack  
  def playCard(self, card):
-  self.hand.delete(card)
+  stack.append(card)
+  self.hand.remove(card)
 
- def updateCash(self, chg):
-  self.cash += chg
-
- def trade(self):
-  self.positions = self.positions
+#Current player gives *quant1 *stock1 to player *other for *quant2 *stock2
+ def trade(self, other, stock1, quant1, stock2, quant2):
+  templist1 = [item[0] for item in self.positions]
+  templist2 = [item[0] for item in other.positions]
+  self.positions[templist1.index(stock1)][1] -= quant1
+  self.positions[templist2.index(stock2)][1] += quant2
+  other.positions[templist2.index(stock2)][1] -= quant
+  other.positions[templist1.index(stock1)][1] += quant
   
+#Increases *stock by *quant, while decreasing cash holdings
  def buy(self, stock, quant):
-  self.positions.updateQuant(stock, quant)
-  self.Updatecash(-1*quant*stock.price)
-
+  templist = [item[0] for item in self.positions]
+  self.positions[templist.index(stock)][1] += quant
+  self.cash += (-1*quant*stock.price)
+  
+#Decrease *stock by *quant, while increasing cash holdings
  def sell(self, stock, quant):
-  self.positions.updateQuant(stock, -quant)
-  self.Updatecash(quant*stock.price)
+  templist = [item[0] for item in self.positions]
+  self.positions[templist.index(stock)][1] -= quant
+  self.cash += (quant*stock.price)
   
 #Methods
-def initStocks():
- crt = Stock("CRT", 5, "Sp", "Su")
- cbg = Stock("CBG", 6, "Sp", "Fa")
- mln = Stock("MLN", 7, "Su", "Sp")
- rds = Stock("RDS", 8, "Su", "Fa")
- crn = Stock("CRN", 9, "Fa", "Sp")
- apl = Stock("APL", 10, "Fa", "Su")
- return [crt, cbg, mln, rds, crn, apl]
 
-def initCards():
- bulls = Deck()
- for i in range(50):
-  bulls.addCard(Card("bull","NA"))
-  
- bears = Deck()
- for i in range(50):
-  bears.addCard(Card("bear","NA"))
-             
- market = Deck()
- for i in range(100):
-  market.addCard(Card("market","NA"))
-             
- bulls.shuffle()
- bears.shuffle()               
- market.shuffle()
- return [bulls, bears, market]
+#initDeck makes a new Deck object with *amt *cardtype cards then shuffles it
+def initDeck(amt, cardtype):
+ deck = []
+ for i in range(amt):
+  deck.append(Card(cardtype,"NA"))
+ return deck
 
-def stockHelper(stocks, symb):
- for stock in stocks:
-  if stock.ticker == symb:
-   break
-  else:
-   stock = None
- return stock
-
-def marketPhase(player):
- inPhase = True             
- while inPhase :
-  mktcmd = input("What do you wish to buy? ")
-  if mktcmd == "End" :
-    inPhase = False
-    continue                                 
-  else:
-   action = mktcmd[0]
-   stock = mktcmd [2:5]
-   quant = int(mktcmd[6:])
-   if action == "L":
-    player.buy(stockHelper(player.positions.holdings[0:][0], stock), quant)
-   print(str(quant) + " " + stock + " " + action)
-   continue
+#shuffle randomizes *deck
+def shuffle(deck):
+ None
+ 
+###marketPhase lets the player interact with the market
+##def marketPhase(player):
+## inPhase = True             
+## while inPhase :
+##  mktcmd = input("What do you wish to buy? ")
+##  if mktcmd == "End" :
+##    inPhase = False
+##    continue                                 
+##  else:
+##   action = mktcmd[0]
+##   stock = mktcmd [2:5]
+##   quant = int(mktcmd[6:])
+##   if action == "L":
+##    player.buy(stockHelper(player.positions.holdings[0:][0], stock), quant)
+##   print(str(quant) + " " + stock + " " + action)
+##   continue
 
 
-#Main
+#Main (TEST)
 
 #Create Stocks
-stocklist = initStocks()
-#Create Cards
-decklist = initCards()
+crt = Stock("CRT", 5, "Sp", "Su")
+cbg = Stock("CBG", 6, "Sp", "Fa")
+mln = Stock("MLN", 7, "Su", "Sp")
+rds = Stock("RDS", 8, "Su", "Fa")
+crn = Stock("CRN", 9, "Fa", "Sp")
+apl = Stock("APL", 10, "Fa", "Su")
+stocklist = [crt, cbg, mln, rds, crn, apl]
+#Create Decks
+bears = initDeck(50, "bears")
+bulls = initDeck(50, "bulls")
+market = initDeck(100, "market")
+discard = initDeck(0, None)
+stack = initDeck(0, None)
+
 #Create Players
 Player1 = Player("Boar")
-#Add funds
-Player1.updateCash(100)
+Player1.buildPortfolio(stocklist)
 #Create Portfolio
-for stock in stocklist:
- Player1.positions.addStock(stock, 0)
 
-marketPhase(Player1)
+
+
+
+#Testing
+Player1.buy(crt, 5)
+Player1.sell(crt, 5)
 Player1.showPortfolio()
+Player1.drawCard(bears)
+print(Player1.hand[0].cardtype)
+Player1.playCard(Player1.hand[0])
+print(Player1.hand)
+print(stack[0].cardtype)
 
 
 
 
-
-
-#Object and Function Testing
-#Stock test#
-#carrot = Stock("CRT", 8, "Spring", "Winter")
-#print(carrot.ticker)
-#print(carrot.price)
-#print(carrot.good)
-#print(carrot.bad)
-#carrot.chgPrice(2)
-#print(carrot.price)
-#carrot.chgPrice(-4)
-#print(carrot.price)
-
-#Portfolio test
-#porttest = Portfolio()
-#print(porttest.holdings)
-#porttest.addStock(carrot, 1)
-#print(porttest.holdings[0][0].ticker + " " + str(porttest.holdings[0][1]))
-#porttest.updateQuant(0, 5)
-#print(porttest.holdings[0][0].ticker + " " + str(porttest.holdings[0][1]))
