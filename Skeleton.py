@@ -76,8 +76,11 @@ class Liability:
   self.end = start + 2
   self.owner = owner
  def expire(self, turn):
+  templist = [item[0] for item in self.owner.positions]
+   held = self.owner.positions[templist.index(stock)][1]
   if self.end == turn.turnnum:
-   self.owner.buy(self.stock, self.quant)
+   if held < 0 :
+      self.owner.buy(self.stock, max([-held,-self.quant]))
    self.owner.contracts.remove(self)
 
 #Player 
